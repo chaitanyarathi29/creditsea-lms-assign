@@ -1,0 +1,21 @@
+{
+  "name": "e2e-tests",
+  "module": "index.ts",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "test": "bun test"
+  },
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  },
+  "dependencies": {
+    "@types/bcrypt": "^6.0.0",
+    "@types/jsonwebtoken": "^9.0.10",
+    "bcrypt": "^6.0.0",
+    "jsonwebtoken": "^9.0.3"
+  }
+}
