@@ -15,9 +15,7 @@ import type { Role } from '../models/user'
 
 dotenv.config()
 
-const DB_URL =
-  process.env.DB_URL ||
-  'mongodb://admin:password123@localhost:27017/my_app?authSource=admin'
+const DB_URL = process.env.DB_URL || 'mongodb://localhost:27017/lms'
 
 interface SeedUser {
   name: string

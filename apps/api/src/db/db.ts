@@ -1,17 +1,17 @@
 import mongoose from "mongoose";
-import dotenv from'dotenv'
+import dotenv from 'dotenv'
 dotenv.config()
 
-const DB_URL = process.env.DB_URL || 'mongodb://admin:password123@localhost:27017/my_app?authSource=admin'
+const DB_URL = process.env.DB_URL || 'mongodb://localhost:27017/lms'
 
 
 export const connectToDB = () => {
     mongoose.connect(DB_URL)
-    .then(() => {
-        console.log('connected to db')
-    })
-    .catch((err) => {
-        console.error('failed to connect to db:', err.message)
-        process.exit(1)
-    })
+        .then(() => {
+            console.log('connected to db')
+        })
+        .catch((err) => {
+            console.error('failed to connect to db:', err.message)
+            process.exit(1)
+        })
 }

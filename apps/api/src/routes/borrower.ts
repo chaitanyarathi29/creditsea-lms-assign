@@ -15,11 +15,7 @@ router.post('/profile', borrowerController.submitProfile)
 router.get('/profile', borrowerController.getProfile)
 
 // Salary slip upload
-router.post(
-  '/salary-slip',
-  uploadSalarySlip.single('salarySlip'),
-  borrowerController.uploadSalarySlip
-)
+router.post('/salary-slip', uploadSalarySlip.single('salarySlip'), borrowerController.uploadSalarySlip)
 
 // Loans
 router.post('/loan/apply', borrowerController.applyForLoan)
