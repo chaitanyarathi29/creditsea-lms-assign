@@ -2,6 +2,16 @@
 
 Live Project Link: https://creditsea-lms-assign-web.vercel.app/
 
+Seed script: `bun run src/db/seed.ts` from [apps/api](apps/api)
+
+Seeded credentials:
+
+- Admin: `admin@lms.com` / `admin123`
+- Sales: `sales@lms.com` / `sales123`
+- Sanction: `sanction@lms.com` / `sanction123`
+- Disbursement: `disbursement@lms.com` / `disbursement123`
+- Collection: `collection@lms.com` / `collection123`
+
 CreditSea LMS is a monorepo loan management system with two main apps:
 
 - A Next.js frontend for borrowers and internal teams
