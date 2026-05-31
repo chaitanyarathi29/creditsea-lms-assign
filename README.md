@@ -1,6 +1,9 @@
+
 # CreditSea LMS
 
 Live Project Link: https://creditsea-lms-assign-web.vercel.app/
+
+https://github.com/user-attachments/assets/51696c35-2d22-498a-9761-2ea1d357df4a
 
 Seed script: `bun run src/db/seed.ts` from [apps/api](apps/api)
 
