@@ -2,12 +2,14 @@ import { describe, test, expect, beforeAll, afterAll } from 'bun:test';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import path from 'path';
+import { fileURLToPath } from 'url';
 
 // Load environmental variables
-dotenv.config({ path: path.join(__dirname, '../apps/api/src/config/.env') });
+const currentDir = path.dirname(fileURLToPath(import.meta.url));
+dotenv.config({ path: path.join(currentDir, '../apps/api/src/config/.env') });
 
 const DB_URL = process.env.DB_URL || 'mongodb://localhost:27017/lms';
-const BACKEND_URL = 'http://localhost:8000';
+const BACKEND_URL = (process.env.BACKEND_URL || '').trim();
 
 const TEST_EMAIL = 'auth_test_borrower@lms.com';
 const TEST_PASSWORD = 'password123';

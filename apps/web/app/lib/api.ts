@@ -1,6 +1,17 @@
 /* ─── Centralised API Fetch Wrapper ─── */
 
-const BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api'
+function getBaseUrl(): string {
+  const rawUrl = (process.env.NEXT_PUBLIC_API_URL || '').trim()
+  const normalizedUrl = rawUrl.replace(/\/$/, '')
+
+  if (normalizedUrl.endsWith('/api')) {
+    return normalizedUrl
+  }
+
+  return `${normalizedUrl}/api`
+}
+
+const BASE_URL = getBaseUrl()
 
 function getToken(): string | null {
   if (typeof window === 'undefined') return null

@@ -2,11 +2,13 @@ import { describe, test, expect, beforeAll, afterAll } from 'bun:test';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import path from 'path';
+import { fileURLToPath } from 'url';
 
-dotenv.config({ path: path.join(__dirname, '../apps/api/src/config/.env') });
+const currentDir = path.dirname(fileURLToPath(import.meta.url));
+dotenv.config({ path: path.join(currentDir, '../apps/api/src/config/.env') });
 
 const DB_URL = process.env.DB_URL || 'mongodb://localhost:27017/lms';
-const BACKEND_URL = 'http://localhost:8000';
+const BACKEND_URL = (process.env.BACKEND_URL || '').trim();
 
 const BORROWER_EMAIL = 'dashboard_flow_borrower@lms.com';
 const BORROWER_PASSWORD = 'password123';
@@ -33,7 +35,7 @@ let collectionExecutiveId = null;
 let partialUtr = null;
 let finalUtr = null;
 
-beforeAll(async () => {
+async function setupDashboardFixture() {
   try {
     partialUtr = `UTR-E2E-PARTIAL-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
     finalUtr = `UTR-E2E-FINAL-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
@@ -152,7 +154,9 @@ beforeAll(async () => {
     console.error(err.message);
     throw err;
   }
-});
+}
+
+await setupDashboardFixture();
 
 afterAll(async () => {
   try {
