@@ -1,5 +1,7 @@
 # CreditSea LMS
 
+Live Project Link: https://creditsea-lms-assign-web.vercel.app/
+
 CreditSea LMS is a monorepo loan management system with two main apps:
 
 - A Next.js frontend for borrowers and internal teams
