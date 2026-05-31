@@ -20,11 +20,7 @@ export default function Navbar() {
   const isBorrower = user?.role === 'BORROWER'
 
   const handleLogoClick = () => {
-    if (!user) {
-      router.push('/')
-    } else {
-      router.push(isBorrower ? '/apply' : '/dashboard')
-    }
+    router.push('/')
   }
 
   const handleScrollTo = (id: string) => {
