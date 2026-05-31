@@ -29,18 +29,20 @@ export default function Sidebar() {
 
   return (
     <aside className={styles.sidebar}>
-      <div className={styles.sectionLabel}>Modules</div>
-      <nav className={styles.nav}>
-        {visibleItems.map((item) => (
-          <button
-            key={item.path}
-            className={`${styles.navItem} ${pathname === item.path ? styles.active : ''}`}
-            onClick={() => router.push(item.path)}
-          >
-            <span className={styles.label}>{item.label}</span>
-          </button>
-        ))}
-      </nav>
+      <div className={styles.sidebarInner}>
+        <div className={styles.sectionLabel}>Modules</div>
+        <nav className={styles.nav}>
+          {visibleItems.map((item) => (
+            <button
+              key={item.path}
+              className={`${styles.navItem} ${pathname === item.path ? styles.active : ''}`}
+              onClick={() => router.push(item.path)}
+            >
+              <span className={styles.label}>{item.label}</span>
+            </button>
+          ))}
+        </nav>
+      </div>
     </aside>
   )
 }

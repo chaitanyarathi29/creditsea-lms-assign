@@ -1,13 +1,16 @@
 .layout {
   display: flex;
   flex-direction: column;
-  min-height: calc(100vh - 53px);
+  min-height: calc(100vh - 60px); /* 60px = navbar height */
 }
 
+/* Page content area — matches navbar/sidebar max-width + gutter */
 .main {
   flex: 1;
-  padding: var(--space-8);
-  max-width: 100%;
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: var(--space-8) 3rem;
   overflow-x: hidden;
   animation: fadeIn 0.25s ease forwards;
 }
@@ -28,8 +31,14 @@
   animation: spin 0.7s linear infinite;
 }
 
+@media (max-width: 1024px) {
+  .main {
+    padding: var(--space-6) 2rem;
+  }
+}
+
 @media (max-width: 768px) {
   .main {
-    padding: var(--space-5);
+    padding: var(--space-5) 1.25rem;
   }
 }

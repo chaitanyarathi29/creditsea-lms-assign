@@ -2,12 +2,22 @@
   width: 100%;
   background: var(--color-surface);
   border-bottom: 1px solid var(--color-border);
-  padding: 0 var(--space-8);
+  display: flex;
+  align-items: stretch;
+  height: 48px;
+  flex-shrink: 0;
+}
+
+/* Inner row mirrors the navbar max-width + padding */
+.sidebarInner {
+  max-width: 1400px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 3rem;
   display: flex;
   align-items: center;
-  gap: var(--space-6);
-  height: 52px;
-  flex-shrink: 0;
+  gap: var(--space-5);
+  height: 100%;
 }
 
 .sectionLabel {
@@ -61,11 +71,16 @@
   line-height: 1;
 }
 
+@media (max-width: 1024px) {
+  .sidebarInner {
+    padding: 0 2rem;
+  }
+}
+
 @media (max-width: 768px) {
-  .sidebar {
-    padding: 0 var(--space-4);
-    gap: var(--space-4);
-    height: 48px;
+  .sidebarInner {
+    padding: 0 1.25rem;
+    gap: var(--space-3);
   }
 
   .sectionLabel {
