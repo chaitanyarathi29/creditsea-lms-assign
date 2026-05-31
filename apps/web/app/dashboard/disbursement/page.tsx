@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { api } from '../../lib/api'
 import { useToast } from '../../components/Toast'
 import LoadingSpinner from '../../components/LoadingSpinner'
@@ -17,20 +17,21 @@ export default function DisbursementPage() {
   const [actioning, setActioning] = useState<string | null>(null)
   const { showToast } = useToast()
 
-  const fetchLoans = async () => {
+  const fetchLoans = useCallback(async () => {
     try {
       const data = await api.get<LoansResponse>('/dashboard/disbursement/loans')
       setLoans(data.loans || [])
-    } catch (err: any) {
-      showToast(err.message || 'Failed to fetch sanctioned loans', 'error')
+    } catch (err) {
+      const error = err as Error
+      showToast(error.message || 'Failed to fetch sanctioned loans', 'error')
     } finally {
       setLoading(false)
     }
-  }
+  }, [showToast])
 
   useEffect(() => {
     fetchLoans()
-  }, [])
+  }, [fetchLoans])
 
   const handleDisburse = async (loanId: string, borrowerName: string, amount: number) => {
     if (!confirm(`Are you sure you want to disburse ₹${amount.toLocaleString('en-IN')} to ${borrowerName}?`)) {
@@ -42,8 +43,9 @@ export default function DisbursementPage() {
       await api.patch(`/dashboard/disbursement/loans/${loanId}/disburse`)
       showToast(`Disbursed loan to ${borrowerName} successfully`, 'success')
       fetchLoans()
-    } catch (err: any) {
-      showToast(err.message || 'Disbursement failed', 'error')
+    } catch (err) {
+      const error = err as Error
+      showToast(error.message || 'Disbursement failed', 'error')
     } finally {
       setActioning(null)
     }
@@ -90,9 +92,9 @@ export default function DisbursementPage() {
             </thead>
             <tbody>
               {loans.map((loan) => {
-                const profile: any = loan.profileId
-                const borrower: any = loan.borrowerId
-                const sanctionedBy: any = loan.sanctionedBy
+                const profile = typeof loan.profileId === 'object' && loan.profileId !== null ? loan.profileId : null
+                const borrower = typeof loan.borrowerId === 'object' && loan.borrowerId !== null ? loan.borrowerId : null
+                const sanctionedBy = typeof loan.sanctionedBy === 'object' && loan.sanctionedBy !== null ? loan.sanctionedBy : null
                 const borrowerName = profile?.fullName || borrower?.name || '—'
 
                 return (

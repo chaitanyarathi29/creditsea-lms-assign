@@ -4,7 +4,7 @@ import jwt from 'jsonwebtoken'
 import { User } from '../models/user'
 import type {IUser} from '../models/user'
 
-const JWT_SECRET = process.env.JWT_SECRET || 'changeme'
+const JWT_SECRET = process.env.JWT_SECRET!
 
 export const generateToken = (user: any) => {
   return jwt.sign(

@@ -5,10 +5,9 @@ import { useRouter } from 'next/navigation'
 import { api } from '../../lib/api'
 import { useToast } from '../../components/Toast'
 import LoadingSpinner from '../../components/LoadingSpinner'
-import type { BorrowerProfile, ProfileResponse, LoanApplyResponse } from '../../lib/types'
+import type { ProfileResponse, LoanApplyResponse } from '../../lib/types'
 
 export default function LoanConfigPage() {
-  const [profile, setProfile] = useState<BorrowerProfile | null>(null)
   const [loading, setLoading] = useState(true)
   const [submitting, setSubmitting] = useState(false)
   const [loanAmount, setLoanAmount] = useState(100000)
@@ -21,7 +20,6 @@ export default function LoanConfigPage() {
       try {
         const data = await api.get<ProfileResponse>('/borrower/profile')
         if (data.profile) {
-          setProfile(data.profile)
           if (data.profile.breStatus !== 'PASSED') {
             showToast('Please pass the eligibility checks first', 'warning')
             router.push('/apply')
@@ -32,7 +30,7 @@ export default function LoanConfigPage() {
         } else {
           router.push('/apply')
         }
-      } catch (err: any) {
+      } catch {
         showToast('Please complete your personal details first', 'warning')
         router.push('/apply')
       } finally {
@@ -56,8 +54,9 @@ export default function LoanConfigPage() {
       })
       showToast('Loan application submitted successfully!', 'success')
       router.push('/apply/status')
-    } catch (err: any) {
-      showToast(err.message || 'Application failed', 'error')
+    } catch (err) {
+      const error = err as Error
+      showToast(error.message || 'Application failed', 'error')
     } finally {
       setSubmitting(false)
     }

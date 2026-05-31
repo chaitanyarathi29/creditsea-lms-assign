@@ -1,21 +1,10 @@
 import multer from 'multer'
-import path from 'path'
 import type { Request } from 'express'
 
 const ALLOWED_MIME_TYPES = ['application/pdf', 'image/jpeg', 'image/png']
 const MAX_FILE_SIZE = 5 * 1024 * 1024 // 5 MB
 
-const storage = multer.diskStorage({
-  destination: (_req: Request, _file, cb) => {
-    cb(null, path.join(process.cwd(), 'uploads', 'salary-slips'))
-  },
-  filename: (req: Request, file, cb) => {
-    const userId = req.user?.id || 'unknown'
-    const ext = path.extname(file.originalname)
-    const filename = `${userId}_${Date.now()}${ext}`
-    cb(null, filename)
-  },
-})
+const storage = multer.memoryStorage()
 
 const fileFilter = (
   _req: Request,

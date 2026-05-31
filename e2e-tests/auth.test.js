@@ -4,7 +4,7 @@ import dotenv from 'dotenv';
 import path from 'path';
 
 // Load environmental variables
-dotenv.config({ path: path.join(__dirname, '../apps/api/.env') });
+dotenv.config({ path: path.join(__dirname, '../apps/api/src/config/.env') });
 
 const DB_URL = process.env.DB_URL || 'mongodb://localhost:27017/lms';
 const BACKEND_URL = 'http://localhost:8000';
@@ -23,14 +23,7 @@ beforeAll(async () => {
     // Clean up any test user from previous run
     await db.collection('users').deleteOne({ email: TEST_EMAIL });
   } catch (err) {
-    console.error('\n================================================================');
-    console.error('🚨 DATABASE CONNECTION ERROR IN TESTS:');
     console.error(err.message);
-    console.error('\n👉 Solution 1: Whitelist your IP in MongoDB Atlas:');
-    console.error('   https://cloud.mongodb.com/ -> Network Access -> Add Current IP');
-    console.error('\n👉 Solution 2: Use local MongoDB (recommended for offline development):');
-    console.error('   Update DB_URL in apps/api/.env to: mongodb://127.0.0.1:27017/lms');
-    console.error('================================================================\n');
     throw err;
   }
 });

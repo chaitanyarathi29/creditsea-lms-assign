@@ -1,5 +1,8 @@
 import type { Request, Response } from 'express'
 import * as borrowerService from '../services/borrowerService'
+import { HeadObjectCommand, PutObjectCommand } from '@aws-sdk/client-s3'
+import path from 'path'
+import { s3BucketName, s3Client, s3Region } from '../config/s3'
 
 /**
  * POST /api/borrower/profile
@@ -81,11 +84,46 @@ export const uploadSalarySlip = async (req: Request, res: Response) => {
       return res.status(400).json({ message: 'No file uploaded. Please upload a PDF, JPG, or PNG file (max 5MB).' })
     }
 
-    const fileUrl = `/uploads/salary-slips/${req.file.filename}`
+    const uploadedFile = req.file as Express.Multer.File & { buffer?: Buffer }
+    const fileBuffer = uploadedFile.buffer
+
+    if (!fileBuffer) {
+      return res.status(400).json({ message: 'File buffer missing. Please retry the upload.' })
+    }
+
+    const ext = path.extname(uploadedFile.originalname)
+    const key = `salary-slips/${userId}_${Date.now()}${ext}`
+
+    const putResult = await s3Client.send(
+      new PutObjectCommand({
+        Bucket: s3BucketName,
+        Key: key,
+        Body: fileBuffer,
+        ContentType: uploadedFile.mimetype,
+      })
+    )
+
+    const headResult = await s3Client.send(
+      new HeadObjectCommand({
+        Bucket: s3BucketName,
+        Key: key,
+      })
+    )
+
+    const fileUrl = `https://${s3BucketName}.s3.${s3Region}.amazonaws.com/${key}`
     const profile = await borrowerService.updateSalarySlip(userId, fileUrl)
 
     res.status(200).json({
       message: 'Salary slip uploaded successfully',
+      uploadedTo: 's3',
+      verified: true,
+      bucket: s3BucketName,
+      key,
+      etag: putResult.ETag,
+      contentLength: headResult.ContentLength,
+      contentType: headResult.ContentType,
+      lastModified: headResult.LastModified,
+      location: fileUrl,
       salarySlipUrl: fileUrl,
       profile,
     })

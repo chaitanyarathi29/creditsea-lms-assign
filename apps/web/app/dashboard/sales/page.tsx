@@ -18,8 +18,9 @@ export default function SalesPage() {
       try {
         const data = await api.get<LeadsResponse>('/dashboard/sales/leads')
         setLeads(data.leads || [])
-      } catch (err: any) {
-        showToast(err.message || 'Failed to fetch leads', 'error')
+      } catch (err) {
+        const error = err as Error
+        showToast(error.message || 'Failed to fetch leads', 'error')
       } finally {
         setLoading(false)
       }

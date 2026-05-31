@@ -1,11 +1,11 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { api } from '../../lib/api'
 import { useToast } from '../../components/Toast'
 import LoadingSpinner from '../../components/LoadingSpinner'
 import Modal from '../../components/Modal'
-import type { Loan } from '../../lib/types'
+import type { Loan, BorrowerProfile } from '../../lib/types'
 
 interface LoansResponse {
   loans: Loan[]
@@ -24,20 +24,21 @@ export default function SanctionPage() {
 
   const { showToast } = useToast()
 
-  const fetchLoans = async () => {
+  const fetchLoans = useCallback(async () => {
     try {
       const data = await api.get<LoansResponse>('/dashboard/sanction/loans')
       setLoans(data.loans || [])
-    } catch (err: any) {
-      showToast(err.message || 'Failed to fetch loans', 'error')
+    } catch (err) {
+      const error = err as Error
+      showToast(error.message || 'Failed to fetch loans', 'error')
     } finally {
       setLoading(false)
     }
-  }
+  }, [showToast])
 
   useEffect(() => {
     fetchLoans()
-  }, [])
+  }, [fetchLoans])
 
   const handleApprove = async (loanId: string) => {
     if (!confirm('Are you sure you want to approve this loan?')) return
@@ -48,8 +49,9 @@ export default function SanctionPage() {
       showToast('Loan approved successfully', 'success')
       setSelectedLoan(null)
       fetchLoans()
-    } catch (err: any) {
-      showToast(err.message || 'Approve failed', 'error')
+    } catch (err) {
+      const error = err as Error
+      showToast(error.message || 'Approve failed', 'error')
     } finally {
       setActioning(false)
     }
@@ -73,8 +75,9 @@ export default function SanctionPage() {
       setShowRejectForm(false)
       setRejectionReason('')
       fetchLoans()
-    } catch (err: any) {
-      showToast(err.message || 'Rejection failed', 'error')
+    } catch (err) {
+      const error = err as Error
+      showToast(error.message || 'Rejection failed', 'error')
     } finally {
       setActioning(false)
     }
@@ -128,10 +131,14 @@ export default function SanctionPage() {
             </thead>
             <tbody>
               {loans.map((loan) => {
-                const profile: any = loan.profileId
-                const borrower: any = loan.borrowerId
+                const profile = typeof loan.profileId === 'object' && loan.profileId !== null ? loan.profileId : null
+                const borrower = typeof loan.borrowerId === 'object' && loan.borrowerId !== null ? loan.borrowerId : null
                 return (
-                  <tr key={loan._id}>
+                  <tr
+                    key={loan._id}
+                    className="cursor-pointer"
+                    onClick={() => openReview(loan)}
+                  >
                     <td>
                       <div className="font-semibold">{profile?.fullName || '—'}</div>
                       <div className="text-xs text-muted">{borrower?.email || '—'}</div>
@@ -171,8 +178,8 @@ export default function SanctionPage() {
           title="Review Loan Application"
         >
           {(() => {
-            const profile: any = selectedLoan.profileId
-            const borrower: any = selectedLoan.borrowerId
+            const profile = typeof selectedLoan.profileId === 'object' && selectedLoan.profileId !== null ? (selectedLoan.profileId as unknown as BorrowerProfile) : null
+            const borrower = typeof selectedLoan.borrowerId === 'object' && selectedLoan.borrowerId !== null ? selectedLoan.borrowerId : null
             return (
               <div className="flex flex-col gap-6">
                 {/* Borrower details */}

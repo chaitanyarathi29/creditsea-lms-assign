@@ -22,7 +22,9 @@ export const authMiddleware = (req: Request, res: Response, next: NextFunction) 
 
     if(!secret){
         console.log('secret not provided')
-        return;
+        return res.status(500).json({
+            message: 'Internal server error: auth secret not configured'
+        })
     }
     if(!token){
         return;

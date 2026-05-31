@@ -42,7 +42,7 @@ export async function getLeads() {
 export async function getAppliedLoans() {
   return Loan.find({ status: 'APPLIED' })
     .populate('borrowerId', 'name email')
-    .populate('profileId', 'fullName pan monthlySalary employmentMode')
+    .populate('profileId', 'fullName pan monthlySalary employmentMode salarySlipUrl')
     .sort({ createdAt: 1 })
     .lean()
 }

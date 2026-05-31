@@ -34,9 +34,10 @@ export default function PersonalDetailsPage() {
           setMonthlySalary(data.profile.monthlySalary.toString())
           setEmploymentMode(data.profile.employmentMode)
         }
-      } catch (err: any) {
-        if (err.message && !err.message.includes('not found') && !err.message.includes('404')) {
-          showToast(err.message || 'Failed to fetch profile', 'error')
+      } catch (err) {
+        const error = err as Error
+        if (error.message && !error.message.includes('not found') && !error.message.includes('404')) {
+          showToast(error.message || 'Failed to fetch profile', 'error')
         }
       } finally {
         setLoading(false)
@@ -90,8 +91,9 @@ export default function PersonalDetailsPage() {
       } else {
         showToast('Eligibility checks failed. Please review errors.', 'error')
       }
-    } catch (err: any) {
-      showToast(err.message || 'Failed to submit profile', 'error')
+    } catch (err) {
+      const error = err as Error
+      showToast(error.message || 'Failed to submit profile', 'error')
     } finally {
       setSubmitting(false)
     }
@@ -251,7 +253,7 @@ export default function PersonalDetailsPage() {
                 id="employment"
                 className="input"
                 value={employmentMode}
-                onChange={(e) => setEmploymentMode(e.target.value as any)}
+                onChange={(e) => setEmploymentMode(e.target.value as 'SALARIED' | 'SELF_EMPLOYED' | 'UNEMPLOYED')}
                 disabled={submitting}
                 required
               >

@@ -1,6 +1,7 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import { createPortal } from 'react-dom'
 import styles from './Modal.module.css'
 
 interface ModalProps {
@@ -12,9 +13,14 @@ interface ModalProps {
 
 export default function Modal({ isOpen, onClose, title, children }: ModalProps) {
   const overlayRef = useRef<HTMLDivElement>(null)
+  const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
-    if (isOpen) {
+    setMounted(true)
+  }, [])
+
+  useEffect(() => {
+    if (isOpen && mounted) {
       document.body.style.overflow = 'hidden'
     } else {
       document.body.style.overflow = ''
@@ -22,7 +28,7 @@ export default function Modal({ isOpen, onClose, title, children }: ModalProps) 
     return () => {
       document.body.style.overflow = ''
     }
-  }, [isOpen])
+  }, [isOpen, mounted])
 
   useEffect(() => {
     const handleEsc = (e: KeyboardEvent) => {
@@ -32,9 +38,9 @@ export default function Modal({ isOpen, onClose, title, children }: ModalProps) 
     return () => window.removeEventListener('keydown', handleEsc)
   }, [isOpen, onClose])
 
-  if (!isOpen) return null
+  if (!isOpen || !mounted) return null
 
-  return (
+  return createPortal(
     <div className={styles.overlay} ref={overlayRef} onClick={(e) => {
       if (e.target === overlayRef.current) onClose()
     }}>
@@ -49,6 +55,8 @@ export default function Modal({ isOpen, onClose, title, children }: ModalProps) 
           {children}
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   )
 }
+

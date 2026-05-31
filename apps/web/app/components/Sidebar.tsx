@@ -9,14 +9,13 @@ interface NavItem {
   label: string
   path: string
   roles: Role[]
-  icon: string
 }
 
 const NAV_ITEMS: NavItem[] = [
-  { label: 'Sales', path: '/dashboard/sales', roles: ['SALES', 'ADMIN'], icon: '📊' },
-  { label: 'Sanction', path: '/dashboard/sanction', roles: ['SANCTION', 'ADMIN'], icon: '✅' },
-  { label: 'Disbursement', path: '/dashboard/disbursement', roles: ['DISBURSEMENT', 'ADMIN'], icon: '💰' },
-  { label: 'Collection', path: '/dashboard/collection', roles: ['COLLECTION', 'ADMIN'], icon: '📋' },
+  { label: 'Sales', path: '/dashboard/sales', roles: ['SALES', 'ADMIN'] },
+  { label: 'Sanction', path: '/dashboard/sanction', roles: ['SANCTION', 'ADMIN'] },
+  { label: 'Disbursement', path: '/dashboard/disbursement', roles: ['DISBURSEMENT', 'ADMIN'] },
+  { label: 'Collection', path: '/dashboard/collection', roles: ['COLLECTION', 'ADMIN'] },
 ]
 
 export default function Sidebar() {
@@ -38,7 +37,6 @@ export default function Sidebar() {
             className={`${styles.navItem} ${pathname === item.path ? styles.active : ''}`}
             onClick={() => router.push(item.path)}
           >
-            <span className={styles.icon}>{item.icon}</span>
             <span className={styles.label}>{item.label}</span>
           </button>
         ))}

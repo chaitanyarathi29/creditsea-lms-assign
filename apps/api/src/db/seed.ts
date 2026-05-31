@@ -10,12 +10,13 @@
 import mongoose from 'mongoose'
 import bcrypt from 'bcrypt'
 import dotenv from 'dotenv'
+import path from 'path'
 import { User } from '../models/user'
 import type { Role } from '../models/user'
 
-dotenv.config()
+dotenv.config({ path: path.join(import.meta.dirname, '../config/.env') })
 
-const DB_URL = process.env.DB_URL || 'mongodb://localhost:27017/lms'
+const dbUrl = process.env.DB_URL!
 
 interface SeedUser {
   name: string
@@ -65,7 +66,7 @@ const seedUsers: SeedUser[] = [
 
 async function seed() {
   try {
-    await mongoose.connect(DB_URL)
+    await mongoose.connect(dbUrl)
     console.log('Connected to DB')
 
     for (const userData of seedUsers) {

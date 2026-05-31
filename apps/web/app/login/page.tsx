@@ -37,8 +37,9 @@ export default function LoginPage() {
     try {
       await login(email, password)
       showToast('Successfully signed in', 'success')
-    } catch (err: any) {
-      showToast(err.message || 'Authentication failed', 'error')
+    } catch (err) {
+      const error = err as Error
+      showToast(error.message || 'Authentication failed', 'error')
     } finally {
       setIsSubmitting(false)
     }
@@ -97,7 +98,7 @@ export default function LoginPage() {
         </form>
 
         <div className={styles.footer}>
-          Don't have a borrower account?{' '}
+          Don&apos;t have a borrower account?{' '}
           <Link href="/signup">Sign up here</Link>
         </div>
       </div>

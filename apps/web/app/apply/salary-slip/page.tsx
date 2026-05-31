@@ -30,7 +30,7 @@ export default function SalarySlipPage() {
         } else {
           router.push('/apply')
         }
-      } catch (err: any) {
+      } catch {
         showToast('Please complete your personal details first', 'warning')
         router.push('/apply')
       } finally {
@@ -98,8 +98,9 @@ export default function SalarySlipPage() {
       setProfile(data.profile)
       setSelectedFile(null)
       showToast('Salary slip uploaded successfully!', 'success')
-    } catch (err: any) {
-      showToast(err.message || 'File upload failed. Make sure the S3 service is running.', 'error')
+    } catch (err) {
+      const error = err as Error
+      showToast(error.message || 'File upload failed. Make sure the S3 service is running.', 'error')
     } finally {
       setUploading(false)
     }

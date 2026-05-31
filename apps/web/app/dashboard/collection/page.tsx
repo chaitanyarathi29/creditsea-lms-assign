@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { api } from '../../lib/api'
 import { useToast } from '../../components/Toast'
 import LoadingSpinner from '../../components/LoadingSpinner'
@@ -40,28 +40,30 @@ export default function CollectionPage() {
 
   const { showToast } = useToast()
 
-  const fetchLoans = async () => {
+  const fetchLoans = useCallback(async () => {
     try {
       const data = await api.get<LoansResponse>('/dashboard/collection/loans')
       setLoans(data.loans || [])
-    } catch (err: any) {
-      showToast(err.message || 'Failed to fetch active loans', 'error')
+    } catch (err) {
+      const error = err as Error
+      showToast(error.message || 'Failed to fetch active loans', 'error')
     } finally {
       setLoading(false)
     }
-  }
+  }, [showToast])
 
   useEffect(() => {
     fetchLoans()
-  }, [])
+  }, [fetchLoans])
 
   const fetchPayments = async (loanId: string) => {
     setLoadingPayments(true)
     try {
       const data = await api.get<PaymentsResponse>(`/dashboard/collection/loans/${loanId}/payments`)
       setPayments(data.payments || [])
-    } catch (err: any) {
-      showToast(err.message || 'Failed to fetch payments', 'error')
+    } catch (err) {
+      const error = err as Error
+      showToast(error.message || 'Failed to fetch payments', 'error')
     } finally {
       setLoadingPayments(false)
     }
@@ -101,7 +103,7 @@ export default function CollectionPage() {
 
     setRecording(true)
     try {
-      const response = await api.post<any>(`/dashboard/collection/loans/${loanId}/payment`, {
+      const response = await api.post<{ message: string }>(`/dashboard/collection/loans/${loanId}/payment`, {
         utrNumber: utrNumber.trim(),
         amount: payAmount,
         date
@@ -113,8 +115,9 @@ export default function CollectionPage() {
       
       await fetchLoans()
       await fetchPayments(loanId)
-    } catch (err: any) {
-      showToast(err.message || 'Failed to record payment', 'error')
+    } catch (err) {
+      const error = err as Error
+      showToast(error.message || 'Failed to record payment', 'error')
     } finally {
       setRecording(false)
     }
@@ -162,8 +165,8 @@ export default function CollectionPage() {
             </thead>
             <tbody>
               {loans.map((loan) => {
-                const profile: any = loan.profileId
-                const borrower: any = loan.borrowerId
+                const profile = typeof loan.profileId === 'object' && loan.profileId !== null ? loan.profileId : null
+                const borrower = typeof loan.borrowerId === 'object' && loan.borrowerId !== null ? loan.borrowerId : null
                 const isExpanded = expandedLoanId === loan._id
                 const borrowerName = profile?.fullName || borrower?.name || '—'
 
@@ -221,7 +224,7 @@ export default function CollectionPage() {
                                     </thead>
                                     <tbody>
                                       {payments.map((payment) => {
-                                        const recordedBy: any = payment.recordedBy
+                                        const recordedBy = typeof payment.recordedBy === 'object' && payment.recordedBy !== null ? payment.recordedBy : null
                                         return (
                                           <tr key={payment._id}>
                                             <td style={{ fontFamily: 'var(--font-mono)' }}>{payment.utrNumber}</td>

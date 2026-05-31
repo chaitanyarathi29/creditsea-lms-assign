@@ -8,6 +8,14 @@ declare global {
         role: Role
       }
     }
+
+    namespace Multer {
+      interface File {
+        location?: string
+        key?: string
+        bucket?: string
+      }
+    }
   }
 }
 

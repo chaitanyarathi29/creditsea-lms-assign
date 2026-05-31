@@ -39,8 +39,9 @@ export default function SignupPage() {
     try {
       await signup(name, email, password)
       showToast('Account created successfully', 'success')
-    } catch (err: any) {
-      showToast(err.message || 'Registration failed', 'error')
+    } catch (err) {
+      const error = err as Error
+      showToast(error.message || 'Registration failed', 'error')
     } finally {
       setIsSubmitting(false)
     }

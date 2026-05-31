@@ -2,7 +2,8 @@
   background: rgba(250, 248, 245, 0.8);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border-bottom: none; /* Removed bottom border line completely */
+  border-bottom: none;
+  /* Removed bottom border line completely */
   position: sticky;
   top: 0;
   z-index: 100;
@@ -15,7 +16,8 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 1rem var(--space-6); /* Ultra-slim padding */
+  padding: 1rem var(--space-6);
+  /* Ultra-slim padding */
   gap: var(--space-4);
 }
 
@@ -30,9 +32,9 @@
 }
 
 .logo span {
-  font-size: 1.15rem; /* Increased logo size */
-  font-weight: 600;
-  letter-spacing: 0.22em;
+  font-size: 1.15rem;
+  font-weight: 300;
+  letter-spacing: 0.2em;
   color: var(--color-text);
 }
 
@@ -54,7 +56,8 @@
 
 .navLink {
   padding: var(--space-1) var(--space-2);
-  font-size: 0.825rem; /* Increased font size */
+  font-size: 0.825rem;
+  /* Increased font size */
   font-weight: 500;
   color: var(--color-text-muted);
   background: none;
@@ -92,7 +95,8 @@
 }
 
 .signupLink {
-  font-size: 0.825rem; /* Increased font size */
+  font-size: 0.825rem;
+  /* Increased font size */
   font-weight: 500;
   color: var(--color-text-muted);
   letter-spacing: 0.16em;
@@ -107,8 +111,10 @@
 .loginBtn {
   border: 1.2px solid rgba(28, 25, 23, 0.4);
   border-radius: var(--radius-full);
-  padding: 0.5rem 1.6rem; /* Increased size/padding */
-  font-size: 0.825rem; /* Increased font size */
+  padding: 0.5rem 1.6rem;
+  /* Increased size/padding */
+  font-size: 0.825rem;
+  /* Increased font size */
   font-weight: 500;
   color: var(--color-text-secondary);
   letter-spacing: 0.16em;

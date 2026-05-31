@@ -1,7 +1,6 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
-import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { useAuth } from './lib/auth'
 import Navbar from './components/Navbar'
@@ -28,7 +27,6 @@ const INITIAL_MOCK_LOANS: MockLoan[] = [
 
 export default function LandingPage() {
   const { user, isLoading } = useAuth()
-  const router = useRouter()
 
   // Calculator states
   const [loanAmount, setLoanAmount] = useState<number>(150000)
@@ -38,19 +36,17 @@ export default function LandingPage() {
   // Live status ticker
   const [loans, setLoans] = useState<MockLoan[]>(INITIAL_MOCK_LOANS)
   const [lastUpdated, setLastUpdated] = useState<string>('Just now')
-  const [tick, setTick] = useState<number>(0)
 
   // Simulation of live additions / status modifications
   useEffect(() => {
     const interval = setInterval(() => {
-      setTick((t) => t + 1)
       setLastUpdated('Updated just now')
 
       setLoans((prevLoans) => {
         // Randomly modify a status or amount of a loan
         const next = [...prevLoans]
         const idx = Math.floor(Math.random() * next.length)
-        const loan = { ...next[idx] }
+        const loan = { ...next[idx] } as MockLoan
 
         if (loan.status === 'PENDING') {
           loan.status = Math.random() > 0.4 ? 'SANCTIONED' : 'REJECTED'
@@ -105,7 +101,6 @@ export default function LandingPage() {
 
   const emi = calculateEMI()
   const totalRepayment = emi * tenure
-  const totalInterest = totalRepayment - loanAmount
 
   return (
     <div style={{ background: 'var(--color-bg)', minHeight: '100vh', color: 'var(--color-text)', display: 'flex', flexDirection: 'column' }}>
@@ -281,54 +276,50 @@ export default function LandingPage() {
       {/* Capabilities Section */}
       <section id="capabilities" style={{ padding: 'var(--space-12) 0', background: 'var(--color-surface)' }}>
         <div className="container">
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.8fr', gap: 'var(--space-12)', marginBottom: 'var(--space-12)' }}>
-            <div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-8)', marginBottom: 'var(--space-12)' }}>
+            <div style={{ maxWidth: '800px' }}>
               <div className="text-uppercase-subtitle" style={{ marginBottom: 'var(--space-2)' }}>CAPABILITIES</div>
-              <h2 className="text-serif" style={{ fontSize: '2rem', fontWeight: 'var(--weight-light)', lineHeight: '1.2' }}>
+              <h2 className="text-serif" style={{ fontSize: '2.25rem', fontWeight: 'var(--weight-light)', lineHeight: '1.2' }}>
                 A disciplined credit stack for borrowers and administrators.
               </h2>
-              <p style={{ color: 'var(--color-text-secondary)', marginTop: 'var(--space-4)', fontSize: '0.9rem', lineHeight: '1.6' }}>
+              <p style={{ color: 'var(--color-text-secondary)', marginTop: 'var(--space-4)', fontSize: '1.05rem', lineHeight: '1.6' }}>
                 We manage the entire loan lifecycle digitally—from automated underwriting constraints (BRE check) to instantaneous salary parsing ledgers.
               </p>
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'var(--space-4)' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 'var(--space-6)' }}>
               <div style={{ padding: 'var(--space-6)', border: '1px solid var(--color-border)', borderRadius: 'var(--radius-lg)' }}>
-                <h3 className="font-semibold" style={{ fontSize: '1rem', display: 'flex', gap: '8px', alignItems: 'center', marginBottom: '8px' }}>
-                  <span style={{ display: 'inline-block', width: '8px', height: '8px', background: 'var(--color-text)', borderRadius: '50%' }}></span>
+                <h3 className="font-semibold" style={{ fontSize: '1.25rem', marginBottom: '10px' }}>
                   Automated BRE Checking
                 </h3>
-                <p style={{ fontSize: '0.8125rem', color: 'var(--color-text-secondary)', lineHeight: '1.5' }}>
+                <p style={{ fontSize: '0.95rem', color: 'var(--color-text-secondary)', lineHeight: '1.6' }}>
                   System checks age ranges, valid PAN patterns, and minimum incomes instantly to verify credit limits.
                 </p>
               </div>
 
               <div style={{ padding: 'var(--space-6)', border: '1px solid var(--color-border)', borderRadius: 'var(--radius-lg)' }}>
-                <h3 className="font-semibold" style={{ fontSize: '1rem', display: 'flex', gap: '8px', alignItems: 'center', marginBottom: '8px' }}>
-                  <span style={{ display: 'inline-block', width: '8px', height: '8px', background: 'var(--color-text)', borderRadius: '50%' }}></span>
+                <h3 className="font-semibold" style={{ fontSize: '1.25rem', marginBottom: '10px' }}>
                   Salary slip parser
                 </h3>
-                <p style={{ fontSize: '0.8125rem', color: 'var(--color-text-secondary)', lineHeight: '1.5' }}>
-                  Upload a PDF salary slip, and our file validator logs records into the executive's ledger instantly.
+                <p style={{ fontSize: '0.95rem', color: 'var(--color-text-secondary)', lineHeight: '1.6' }}>
+                  Upload a PDF salary slip, and our file validator logs records into the executive&apos;s ledger instantly.
                 </p>
               </div>
 
               <div style={{ padding: 'var(--space-6)', border: '1px solid var(--color-border)', borderRadius: 'var(--radius-lg)' }}>
-                <h3 className="font-semibold" style={{ fontSize: '1rem', display: 'flex', gap: '8px', alignItems: 'center', marginBottom: '8px' }}>
-                  <span style={{ display: 'inline-block', width: '8px', height: '8px', background: 'var(--color-text)', borderRadius: '50%' }}></span>
+                <h3 className="font-semibold" style={{ fontSize: '1.25rem', marginBottom: '10px' }}>
                   Flexible configurations
                 </h3>
-                <p style={{ fontSize: '0.8125rem', color: 'var(--color-text-secondary)', lineHeight: '1.5' }}>
+                <p style={{ fontSize: '0.95rem', color: 'var(--color-text-secondary)', lineHeight: '1.6' }}>
                   Adjust amount levels, month tenures, and review pre-generated schedules with total clarity.
                 </p>
               </div>
 
               <div style={{ padding: 'var(--space-6)', border: '1px solid var(--color-border)', borderRadius: 'var(--radius-lg)' }}>
-                <h3 className="font-semibold" style={{ fontSize: '1rem', display: 'flex', gap: '8px', alignItems: 'center', marginBottom: '8px' }}>
-                  <span style={{ display: 'inline-block', width: '8px', height: '8px', background: 'var(--color-text)', borderRadius: '50%' }}></span>
+                <h3 className="font-semibold" style={{ fontSize: '1.25rem', marginBottom: '10px' }}>
                   Secure Disbursals
                 </h3>
-                <p style={{ fontSize: '0.8125rem', color: 'var(--color-text-secondary)', lineHeight: '1.5' }}>
+                <p style={{ fontSize: '0.95rem', color: 'var(--color-text-secondary)', lineHeight: '1.6' }}>
                   Admin executives authorize loan status logs with a single click, triggering immediate ledger audits.
                 </p>
               </div>
