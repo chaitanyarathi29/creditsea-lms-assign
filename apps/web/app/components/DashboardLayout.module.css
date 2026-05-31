@@ -1,0 +1,34 @@
+.layout {
+  display: flex;
+  min-height: calc(100vh - 53px);
+}
+
+.main {
+  flex: 1;
+  padding: var(--space-8);
+  max-width: 100%;
+  overflow-x: hidden;
+  animation: fadeIn 0.25s ease forwards;
+}
+
+.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+}
+
+.spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid var(--color-border);
+  border-top-color: var(--color-accent);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+@media (max-width: 768px) {
+  .main {
+    padding: var(--space-5);
+  }
+}
