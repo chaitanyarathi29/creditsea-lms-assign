@@ -12,6 +12,22 @@ Seeded credentials:
 - Disbursement: `disbursement@lms.com` / `disbursement123`
 - Collection: `collection@lms.com` / `collection123`
 
+AWS salary slip upload architecture:
+
+```mermaid
+flowchart LR
+	A[Borrower uploads salary slip in frontend] --> B[Frontend sends FormData to /api/borrower/salary-slip]
+	B --> C[Multer middleware checks file type and size]
+	C --> D[File stays in memory as a buffer]
+	D --> E[Backend creates S3 key: salary-slips/userId_timestamp.ext]
+	E --> F[PutObjectCommand uploads file to AWS S3]
+	F --> G[HeadObjectCommand confirms the upload]
+	G --> H[Backend saves the S3 URL in the borrower profile]
+	H --> I[Sanction team can open the salary slip from the dashboard]
+```
+
+In simple words, the file does not go directly to the database. It goes from the frontend to the backend, then the backend stores it in AWS S3 and saves only the file URL in MongoDB.
+
 CreditSea LMS is a monorepo loan management system with two main apps:
 
 - A Next.js frontend for borrowers and internal teams
