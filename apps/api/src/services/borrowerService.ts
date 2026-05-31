@@ -40,7 +40,7 @@ export async function submitProfile(
   const profile = await BorrowerProfile.findOneAndUpdate(
     { userId },
     profileData,
-    { new: true, upsert: true, runValidators: true }
+    { returnDocument: 'after', upsert: true, runValidators: true }
   )
 
   return { profile, breResult }
